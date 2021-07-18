@@ -20,6 +20,7 @@ request.onerror = function (e) {
 function checkDatabase() {
   let transaction = db.transaction(['BudgetStore'], 'readwrite');
   const store = transaction.objectStore('BudgetStore');
+  const getAll = store.getAll()
   getAll.onsuccess = function () {
     if (getAll.result.length > 0) {
       fetch('/api/transaction/bulk', {

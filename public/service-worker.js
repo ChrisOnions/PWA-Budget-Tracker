@@ -2,11 +2,12 @@ const APP_NAME = "Budget-Tracker"
 const CACHE_NAME = "Version-01";
 const DATA_CACHE_NAME = APP_NAME + CACHE_NAME;
 const FILES_TO_CACHE = [
+  '/',
   './index.html',
-  './css/styles.css',
-  './js/index.js',
-  './js/idb.js',
-  './manifest.json',
+  './styles.css',
+  './index.js',
+  './db.js',
+  './manifest.webmanifest',
   './icons/icon-72x72.png',
   './icons/icon-512x512.png',
   './icons/icon-384x384.png',
@@ -20,15 +21,8 @@ const FILES_TO_CACHE = [
 
 
 self.addEventListener("install", function (evt) {
-  console.log(evt);
-  console.log(evt.request);
-  console.log(evt.request.url);
-
   evt.waitUntil(
-    caches.open(DATA_CACHE_NAME).then((cache) => cache.add("/api/images"))
-  );
-  evt.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
+    caches.open(DATA_CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
   );
   self.skipWaiting();
 });
@@ -36,9 +30,6 @@ self.addEventListener("install", function (evt) {
 
 self.addEventListener("activate", function (evt) {
 
-  console.log(evt);
-  console.log(evt.request);
-  console.log(evt.request.url);
   evt.waitUntil(
     caches.keys().then(keyList => {
       return Promise.all(
@@ -57,9 +48,6 @@ self.addEventListener("activate", function (evt) {
 
 self.addEventListener("fetch", function (evt) {
   if (evt.request.url.includes("/api/")) {
-    console.log(evt);
-    console.log(evt.request);
-    console.log(evt.request.url);
     evt.respondWith(
       caches.open(DATA_CACHE_NAME).then(cache => {
         return fetch(evt.request)
